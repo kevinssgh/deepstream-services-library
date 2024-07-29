@@ -91,8 +91,10 @@ namespace DSL
         {
             return false;
         }
-        // Add PipelineSourcesBintr as chid of this PipelineBintr.
-        GstNodetr::AddChild(m_pPipelineSourcesBintr);
+        // Add PipelineSourcesBintr as child of this PipelineBintr.
+        if (!GstNodetr::IsChild( m_pPipelineSourcesBintr ))
+            GstNodetr::AddChild(m_pPipelineSourcesBintr);
+
 
         return true;
     }
