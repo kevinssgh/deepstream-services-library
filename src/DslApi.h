@@ -7440,6 +7440,16 @@ DslReturnType dsl_sink_window_egl_force_aspect_ratio_set(const wchar_t* name,
 DslReturnType dsl_sink_file_new(const wchar_t* name, const wchar_t* file_path, 
      uint codec, uint container, uint bitrate, uint interval);
 
+DslReturnType dsl_sink_splitmux_new(const wchar_t* name, const wchar_t* filepath,
+     uint codec, uint container, uint bitrate, uint interval,
+     uint64_t maxSizeBytes, uint64_t maxDurationNs);
+
+DslReturnType dsl_sink_splitmux_location_set(const wchar_t* name, const wchar_t* filepath);
+
+DslReturnType dsl_sink_splitmux_max_size_byte_set(const wchar_t* name, uint maxSizeBytes);
+
+DslReturnType dsl_sink_splitmux_max_size_time_set(const wchar_t* name, uint maxDurationNs);
+
 /**
  * @brief creates a new, uniquely named File Record component
  * @param[in] name unique component name for the new Record Sink

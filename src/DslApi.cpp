@@ -7997,6 +7997,55 @@ DslReturnType dsl_sink_window_delete_event_handler_remove(const wchar_t* name,
         SinkWindowDeleteEventHandlerRemove(cstrName.c_str(), handler);
 }
 
+DslReturnType dsl_sink_splitmux_new(const wchar_t* name, const wchar_t* filepath,
+     uint codec, uint container, uint bitrate, uint interval,
+     uint64_t maxSizeBytes, uint64_t maxDurationNs)
+{
+    RETURN_IF_PARAM_IS_NULL(name);
+            
+    std::wstring wstrName(name);
+    std::string cstrName(wstrName.begin(), wstrName.end());
+    std::wstring wstrFilepath(filepath);
+    std::string cstrFilepath(wstrFilepath.begin(), wstrFilepath.end());
+
+    return DSL::Services::GetServices()->SinkSplitMuxNew(cstrName.c_str(), cstrFilepath.c_str(), 
+        codec, container, bitrate, interval,
+        maxSizeBytes, maxDurationNs);
+}
+
+DslReturnType dsl_sink_splitmux_location_set(const wchar_t* name, const wchar_t* filepath)
+{
+    RETURN_IF_PARAM_IS_NULL(name);
+            
+    std::wstring wstrName(name);
+    std::string cstrName(wstrName.begin(), wstrName.end());
+    std::wstring wstrFilepath(filepath);
+    std::string cstrFilepath(wstrFilepath.begin(), wstrFilepath.end());
+
+    return DSL::Services::GetServices()->SinkSplitMuxLocationSet(cstrName.c_str(), cstrFilepath.c_str());
+}
+
+DslReturnType dsl_sink_splitmux_max_size_byte_set(const wchar_t* name, uint maxSizeBytes)
+{
+    RETURN_IF_PARAM_IS_NULL(name);
+            
+    std::wstring wstrName(name);
+    std::string cstrName(wstrName.begin(), wstrName.end());
+
+    return DSL::Services::GetServices()->SinkSplitMuxMaxSizeByteSet(cstrName.c_str(), maxSizeBytes);
+}
+
+DslReturnType dsl_sink_splitmux_max_size_time_set(const wchar_t* name, uint64_t maxDurationNs)
+{
+    RETURN_IF_PARAM_IS_NULL(name);
+            
+    std::wstring wstrName(name);
+    std::string cstrName(wstrName.begin(), wstrName.end());
+
+    return DSL::Services::GetServices()->SinkSplitMuxMaxSizeTimeSet(cstrName.c_str(), maxDurationNs);
+}
+
+
 DslReturnType dsl_sink_file_new(const wchar_t* name, const wchar_t* file_path, 
      uint codec, uint container, uint bitrate, uint interval)
 {

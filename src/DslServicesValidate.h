@@ -357,6 +357,7 @@ THE SOFTWARE.
         !components[name]->IsType(typeid(ThreeDSinkBintr)) and  \
         !components[name]->IsType(typeid(EglSinkBintr)) and  \
         !components[name]->IsType(typeid(FileSinkBintr)) and  \
+        !components[name]->IsType(typeid(SplitMuxSinkBintr)) and \
         !components[name]->IsType(typeid(RecordSinkBintr)) and  \
         !components[name]->IsType(typeid(RtmpSinkBintr)) and \
         !components[name]->IsType(typeid(RtspClientSinkBintr)) and \
@@ -379,6 +380,7 @@ THE SOFTWARE.
         !components[name]->IsType(typeid(ThreeDSinkBintr)) and  \
         !components[name]->IsType(typeid(EglSinkBintr)) and  \
         !components[name]->IsType(typeid(FileSinkBintr)) and  \
+        !components[name]->IsType(typeid(SplitMuxSinkBintr)) and \
         !components[name]->IsType(typeid(RecordSinkBintr)) and  \
         !components[name]->IsType(typeid(RtmpSinkBintr)) and \
         !components[name]->IsType(typeid(RtspClientSinkBintr)) and \

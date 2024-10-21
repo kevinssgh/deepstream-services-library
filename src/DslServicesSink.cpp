@@ -855,6 +855,120 @@ namespace DSL
             return DSL_RESULT_SINK_THREW_EXCEPTION;
         }
     }
+
+    DslReturnType Services::SinkSplitMuxNew(const char* name, const char* filepath,
+                                            uint codec, uint container, uint bitrate, uint interval,
+                                            uint64_t maxSizeBytes, uint64_t maxDurationNs)
+    {
+        LOG_FUNC();
+        LOCK_MUTEX_FOR_CURRENT_SCOPE(&m_servicesMutex);
+
+        try
+        {
+            // ensure component name uniqueness
+            if (m_components.find(name) != m_components.end())
+            {
+                LOG_ERROR("Sink name '" << name << "' is not unique");
+                return DSL_RESULT_SINK_NAME_NOT_UNIQUE;
+            }
+            m_components[name] = DSL_SPLITMUX_SINK_NEW(name, filepath,
+                                                    codec, container, bitrate, interval,
+                                                    maxSizeBytes, maxDurationNs);
+
+            LOG_INFO("New SplitMux Sink '" << name << "' created successfully");
+
+            return DSL_RESULT_SUCCESS;
+        }
+        catch (...)
+        {
+            LOG_ERROR("New Sink '" << name << "' threw exception on create");
+            return DSL_RESULT_SINK_THREW_EXCEPTION;
+        }
+    }
+
+    DslReturnType Services::SinkSplitMuxLocationSet(const char* name, const char* location)
+    {
+        LOG_FUNC();
+        LOCK_MUTEX_FOR_CURRENT_SCOPE(&m_servicesMutex);
+
+        try
+        {
+            DSL_RETURN_IF_COMPONENT_NAME_NOT_FOUND(m_components, name);
+            DSL_RETURN_IF_COMPONENT_IS_NOT_CORRECT_TYPE(m_components, name, SplitMuxSinkBintr);
+
+            DSL_SPLITMUX_SINK_PTR splitmuxSinkBintr =
+                std::dynamic_pointer_cast<SplitMuxSinkBintr>(m_components[name]);
+
+            if (!splitmuxSinkBintr->SetLocation(location))
+            {
+                LOG_ERROR("SplitMuxSink '" << name << "' failed to set location");
+                return DSL_RESULT_SINK_SET_FAILED;
+            }
+            LOG_INFO("Location set successfully for SplitMuxSink '" << name << "'");
+            return DSL_RESULT_SUCCESS;
+        }
+        catch (...)
+        {
+            LOG_ERROR("SplitMuxSink'" << name << "' threw an exception on setting location");
+            return DSL_RESULT_SINK_THREW_EXCEPTION;
+        }
+    }
+
+    DslReturnType Services::SinkSplitMuxMaxSizeByteSet(const char* name, uint64_t maxSizeBytes)
+    {
+        LOG_FUNC();
+        LOCK_MUTEX_FOR_CURRENT_SCOPE(&m_servicesMutex);
+
+        try
+        {
+            DSL_RETURN_IF_COMPONENT_NAME_NOT_FOUND(m_components, name);
+            DSL_RETURN_IF_COMPONENT_IS_NOT_CORRECT_TYPE(m_components, name, SplitMuxSinkBintr);
+
+            DSL_SPLITMUX_SINK_PTR splitmuxSinkBintr =
+                std::dynamic_pointer_cast<SplitMuxSinkBintr>(m_components[name]);
+
+            if (!splitmuxSinkBintr->SetMaxSizeBytes(maxSizeBytes))
+            {
+                LOG_ERROR("SplitMuxSink '" << name << "' failed to set max-size-bytes");
+                return DSL_RESULT_SINK_SET_FAILED;
+            }
+            LOG_INFO("max-size-bytes set successfully for SplitMuxSink '" << name << "'");
+            return DSL_RESULT_SUCCESS;
+        }
+        catch (...)
+        {
+            LOG_ERROR("SplitMuxSink'" << name << "' threw an exception on setting max-size-bytes");
+            return DSL_RESULT_SINK_THREW_EXCEPTION;
+        }
+    }
+
+    DslReturnType Services::SinkSplitMuxMaxSizeTimeSet(const char* name, uint64_t maxDurationNs)
+    {
+        LOG_FUNC();
+        LOCK_MUTEX_FOR_CURRENT_SCOPE(&m_servicesMutex);
+
+        try
+        {
+            DSL_RETURN_IF_COMPONENT_NAME_NOT_FOUND(m_components, name);
+            DSL_RETURN_IF_COMPONENT_IS_NOT_CORRECT_TYPE(m_components, name, SplitMuxSinkBintr);
+
+            DSL_SPLITMUX_SINK_PTR splitmuxSinkBintr =
+                std::dynamic_pointer_cast<SplitMuxSinkBintr>(m_components[name]);
+
+            if (!splitmuxSinkBintr->SetMaxDurationNs(maxDurationNs))
+            {
+                LOG_ERROR("SplitMuxSink '" << name << "' failed to set max-size-time");
+                return DSL_RESULT_SINK_SET_FAILED;
+            }
+            LOG_INFO("max-size-time set successfully for SplitMuxSink '" << name << "'");
+            return DSL_RESULT_SUCCESS;
+        }
+        catch (...)
+        {
+            LOG_ERROR("SplitMuxSink'" << name << "' threw an exception on setting max-size-time");
+            return DSL_RESULT_SINK_THREW_EXCEPTION;
+        }
+    }
     
     DslReturnType Services::SinkRecordNew(const char* name, 
         const char* outdir, uint codec, uint container, 
