@@ -1437,6 +1437,14 @@ namespace DSL {
             
         DslReturnType SinkFileNew(const char* name, const char* filepath, 
             uint codec, uint container, uint bit_rate, uint interval);
+        
+        DslReturnType SinkSplitMuxNew(const char* name, const char* filepath,
+            uint codec, uint container, uint bitrate, uint interval,
+            uint64_t maxSizeBytes, uint64_t maxDurationNs);
+
+        DslReturnType SinkSplitMuxLocationSet(const char* name, const char* location);
+        DslReturnType SinkSplitMuxMaxSizeByteSet(const char* name, uint64_t maxSizeBytes);
+        DslReturnType SinkSplitMuxMaxSizeTimeSet(const char* name, uint64_t maxDurationNs);
             
         DslReturnType SinkRecordNew(const char* name, const char* outdir, 
             uint codec, uint container, uint bitrate, uint interval, 
