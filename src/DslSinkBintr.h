@@ -962,6 +962,10 @@ namespace DSL
     };
 
     //-------------------------------------------------------------------------
+    struct SplitMuxSinkData
+    {
+        std::string filepath;
+    };
 
     class SplitMuxSinkBintr : public EncodeSinkBintr
     {
@@ -1008,6 +1012,7 @@ namespace DSL
     private:
         uint m_container;
         DSL_ELEMENT_PTR m_pContainer;
+        std::shared_ptr<SplitMuxSinkData> m_cbData;
     };
 
     //-------------------------------------------------------------------------

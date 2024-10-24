@@ -1808,6 +1808,33 @@ namespace DSL
     }
 
     //-------------------------------------------------------------------------
+    gchar* format_location_full_callback(GstElement* splitmuxsink, guint fragment_id, GstSample* first_sample, gpointer user_data)
+    {
+        auto cbData = reinterpret_cast<SplitMuxSinkData*>(user_data);
+
+        // GstBuffer* buffer = gst_sample_get_buffer(first_sample);
+        // GstClockTime timestamp = GST_BUFFER_PTS(buffer);
+
+        // if(timestamp == GST_CLOCK_TIME_NONE)
+        // {
+        using namespace std::chrono;
+        auto now = system_clock::now();
+        int64_t timestamp = duration_cast<seconds>(now.time_since_epoch()).count();
+        // }
+
+        // Check if the filepath ends with a slash and construct the filename accordingly
+        std::string filename;
+        if (!cbData->filepath.empty() && cbData->filepath.back() == '/') {
+            filename = cbData->filepath + std::to_string(timestamp) + ".mp4";
+        } else {
+            filename = cbData->filepath + "/" + std::to_string(timestamp) + ".mp4";
+        }
+
+        LOG_INFO("splitmuxsink format_location_full: " << filename);
+
+        return g_strdup(filename.c_str());
+    }
+
     //  gst-launch-1.0 v4l2src device=/dev/video0 !   tee name=t   t. ! queue ! videoconvert ! x264enc ! h264parse ! splitmuxsink location=output_%05d.mp4 max-size-time=20000000000 max-size-bytes=1048576 -e
     SplitMuxSinkBintr::SplitMuxSinkBintr(const char* name, const char* filepath,
                                          uint codec, uint container, uint bitrate, uint interval,
@@ -1820,9 +1847,13 @@ namespace DSL
         m_pSink = DSL_ELEMENT_NEW("splitmuxsink", name);
 
         // Set the location for the output file
-        m_pSink->SetAttribute("location", filepath);
+        // m_pSink->SetAttribute("location", filepath);
         m_pSink->SetAttribute("max-size-bytes", maxSizeBytes);
         m_pSink->SetAttribute("max-size-time", maxDurationNs);
+        m_cbData = std::make_shared<SplitMuxSinkData>();
+        m_cbData->filepath = filepath;
+
+        g_signal_connect(m_pSink->GetGstObject(), "format-location-full", G_CALLBACK(format_location_full_callback), m_cbData.get());
 
         LOG_INFO("");
         LOG_INFO("Initial property values for SplitMuxSinkBintr '" << name << "'");
